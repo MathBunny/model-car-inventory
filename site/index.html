@@ -35,15 +35,10 @@
 
   <script>
     // Your web app's Firebase configuration
-    var firebaseConfig = {
-      apiKey: "AIzaSyAYIvsmEfgkF8gHVwr7MW8W7KQRWxXbt6U",
-      authDomain: "toy-car-visualizer.firebaseapp.com",
-      databaseURL: "https://toy-car-visualizer.firebaseio.com",
-      projectId: "toy-car-visualizer",
-      storageBucket: "",
-      messagingSenderId: "30835560445",
-      appId: "1:30835560445:web:e7fa1a767bbebdce"
-    };
+    // INSERT CONFIG HERE
+
+    
+    /*
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
 
@@ -53,7 +48,7 @@
             console.log(`${doc.id} => ${doc.data()}`);
             console.log(doc.data());
         });
-    });
+    });*/
 
     /*var userId = firebase.auth().currentUser.uid;
     var ref = firebase.database().ref(`/cars/${userId}`).once('value').then((snapshot) => {
@@ -68,7 +63,7 @@
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" href="#">Model Car Inventory</a>
+    <a class="navbar-brand" href="#" style="margin-left:100px">Model Car Inventory</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -121,7 +116,95 @@
         
       </div>
       <div class="col-8">
-        2 of 3 (wider)
+
+
+        <div class="container">
+          <div class="row">
+            <div class="col3">
+              <div class="container">
+                <div class="card bg-dark text-white">
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
+                      <rect fill="#868e96" width="100%" height="100%"></rect>
+                    </svg>
+
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Card title </h5>
+                      <p class="card-text">TemporaryA </p>
+                      <p class="card-text">Last updated 3 mins ago </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col3">
+                <div class="container">
+                  <div class="card bg-dark text-white">
+                      <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
+                        <rect fill="#868e96" width="100%" height="100%"></rect>
+                      </svg>
+
+                      <div class="card-img-overlay">
+                        <h5 class="card-title">Card title </h5>
+                        <p class="card-text">TemporaryB</p>
+                        <p class="card-text">Last updated 3 mins ago </p>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+      </div>
+      <br><br>
+
+        <div class="container">
+          <div class="row">
+            <div class="col3">
+              <div class="container">
+                <div class="card bg-dark text-white">
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
+                      <rect fill="#868e96" width="100%" height="100%"></rect>
+                    </svg>
+
+                    <div class="card-img-overlay">
+                      <h5 class="card-title">Card title </h5>
+                      <p class="card-text">TemporaryC</p>
+                      <p class="card-text">Last updated 3 mins ago </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col3">
+                <div class="container">
+                  <div class="card bg-dark text-white">
+                      <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
+                        <rect fill="#868e96" width="100%" height="100%"></rect>
+                      </svg>
+
+                      <div class="card-img-overlay">
+                        <h5 class="card-title">Card title </h5>
+                        <p class="card-text">TemporaryD</p>
+                        <p class="card-text">Last updated 3 mins ago </p>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <br><br>
+        <nav aria-label="...">
+          <ul class="pagination">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+
+
       </div>
     </div>
     <div id="root"></div>
@@ -159,10 +242,10 @@
       }
 
       // Use the ReactDOM.render to show your component on the browser
-      ReactDOM.render(
+      /*ReactDOM.render(
         <App />,
         rootElement
-      );
+      );*/
   </script>
 
 </body>
