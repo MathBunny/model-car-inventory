@@ -33,31 +33,6 @@
   <!-- TODO: Add SDKs for Firebase products that you want to use
        https://firebase.google.com/docs/web/setup#config-web-app -->
 
-  <script>
-    // Your web app's Firebase configuration
-    // INSERT CONFIG HERE
-
-    
-    /*
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    let db = firebase.firestore();
-    db.collection("cars").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-            console.log(doc.data());
-        });
-    });*/
-
-    /*var userId = firebase.auth().currentUser.uid;
-    var ref = firebase.database().ref(`/cars/${userId}`).once('value').then((snapshot) => {
-      console.log(snapshot);
-    });*/
-
-  </script>
-
-
 </head>
 
 <body>
@@ -120,21 +95,22 @@
 
         <div class="container">
           <div class="row">
+            <div id="testA">
+            </div>
+            <!-- 
             <div class="col3">
               <div class="container">
                 <div class="card bg-dark text-white">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
-                      <rect fill="#868e96" width="100%" height="100%"></rect>
-                    </svg>
-
+                    <img height="180" id='imgA'/>
                     <div class="card-img-overlay">
-                      <h5 class="card-title">Card title </h5>
-                      <p class="card-text">TemporaryA </p>
-                      <p class="card-text">Last updated 3 mins ago </p>
+                      <h5 class="card-title">Mercedes-Benz SLS AMG</h5>
+                      <br><br><br><br>
+                      <p class="card-text" style="text-align:right">2017</p>
                     </div>
                   </div>
                 </div>
               </div>
+            -->
               <div class="col3">
                 <div class="container">
                   <div class="card bg-dark text-white">
@@ -150,6 +126,7 @@
                     </div>
                   </div>
             </div>
+
         </div>
       </div>
       <br><br>
@@ -211,14 +188,17 @@
 
   <!-- </div> -->
 
+
   <script type="text/babel">
       // Obtain the root 
-      const rootElement = document.getElementById('root')
+      const rootElement = document.getElementById('root');
+      const rootElement2 = document.getElementById('testA');
+
       // Create a ES6 class component
       class ShoppingList extends React.Component { 
         // Use the render function to return JSX component      
         render() { 
-            return (
+          return (
             <div className="shopping-list">
             <h1>Shopping List for {this.props.name}</h1>
               <ul>
@@ -231,6 +211,25 @@
           } 
       }
 
+      class PictureComponent extends React.Component {
+        render() {
+          return (
+            <div class="col3">
+              <div class="container">
+                <div class="card bg-dark text-white">
+                  <img height="180" src={this.props.src}/>
+                  <div class="card-img-overlay">
+                    <h5 class="card-title">{this.props.title}</h5>
+                    <br/><br/><br/><br/>
+                    <p class="card-text" style={{'text-align':'right'}}>{this.props.year}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
 
       // Create a function to wrap up your component
       function App(){
@@ -241,11 +240,54 @@
         );
       }
 
+      function App2() {
+        // FIREBASE CONFIG HERE ... ?
+
+        firebase.initializeApp(firebaseConfig);
+        //var img = document.getElementById('imgA');
+        //img.src = 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f';
+        let src = 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f';
+
+        return (
+          <div>
+            <PictureComponent src={src} card-title="Mercedes-Benz SLS AMG" year="2017"/>
+          </div>
+        );
+      }
+
       // Use the ReactDOM.render to show your component on the browser
-      /*ReactDOM.render(
+      ReactDOM.render(
         <App />,
         rootElement
-      );*/
+      );
+
+      ReactDOM.render(
+        <App2 />,
+        testA
+      );
+  </script>
+
+  <script>
+    // Your web app's Firebase configuration
+    // INSERT CONFIG HERE
+
+    /*
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    let db = firebase.firestore();
+    db.collection("cars").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(`${doc.id} => ${doc.data()}`);
+            console.log(doc.data());
+        });
+    });*/
+
+    /*var userId = firebase.auth().currentUser.uid;
+    var ref = firebase.database().ref(`/cars/${userId}`).once('value').then((snapshot) => {
+      console.log(snapshot);
+    });*/
+
   </script>
 
 </body>
