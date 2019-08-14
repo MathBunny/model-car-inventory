@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
   <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
   <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
   <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  <script src="./js/data.js"></script>
 
   <style>
     .verticalLine {
@@ -58,34 +58,9 @@
       <br><br>
       <div class="row">
         <div class="col-2" style="margin-left:20px">
-          <h4> Filters </h4>
-          <h6>Colors</h6>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-            <label class="form-check-label" for="inlineCheckbox1">Blue</label>
-          </div>
-          <br>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-            <label class="form-check-label" for="inlineCheckbox2">Green</label>
-          </div>
-          <br>
+          <div id="filterPaneContainer">
 
-          <br>
-
-          <h6>Brands</h6>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-            <label class="form-check-label" for="inlineCheckbox1">1</label>
           </div>
-          <br>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-            <label class="form-check-label" for="inlineCheckbox2">2</label>
-          </div>
-          <br><br>
-          <button type="button" class="btn btn-primary">Search</button>
-
         </div>
       <div class="verticalLine">
         
@@ -180,8 +155,6 @@
             </li>
           </ul>
         </nav>
-
-
       </div>
     </div>
     <div id="root"></div>
@@ -194,21 +167,89 @@
       const rootElement = document.getElementById('root');
       const rootElement2 = document.getElementById('testA');
 
-      // Create a ES6 class component
-      class ShoppingList extends React.Component { 
-        // Use the render function to return JSX component      
-        render() { 
+      class FilterRow extends React.Component {
+        handleCheck(e) {
+          console.log(e); 
+        }
+
+        render() {
+          const filter = capitalizeFirstLetter(this.props.filter);
+
           return (
-            <div className="shopping-list">
-            <h1>Shopping List for {this.props.name}</h1>
-              <ul>
-                <li>Instagram</li>
-                <li>WhatsApp</li>
-                <li>Oculus</li>
-              </ul>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" onChange={this.handleCheck.bind(this)}/>
+              <label class="form-check-label" for="inlineCheckbox1">{filter}</label>
             </div>
           );
-          } 
+        };
+      };
+
+
+      class FilterTitle extends React.Component {
+        render() {
+            const title = capitalizeFirstLetter(this.props.title);
+            return (<h6>{title}</h6>);
+        };
+      };
+
+      class Filter extends React.Component {
+        render() {
+          const rows = [];
+          this.props.filters.forEach(filter => {
+              rows.push(<FilterRow filter={filter}/>);
+          });
+
+          return (
+            <div>
+              <FilterTitle title={this.props.title}/>
+              {rows}
+              <hr/>
+            </div>
+          );
+        };
+      };
+
+      class Filters extends React.Component{
+          render() {
+            const models = this.props.models;
+            const attrib = new Map();
+
+            models.forEach(model => {
+                const keys = Object.keys(model);
+                keys.forEach((key) => {
+                    if (attrib.get(key) === undefined) {
+                        attrib.set(key, new Set());
+                    }
+                    attrib.get(key).add(model[key]);
+                });
+            });
+
+            const filters = [];
+            attrib.forEach((val, key) => {
+              let arr = [];
+              for (let o of attrib.get(key)) {
+                arr.push(o);
+              }
+
+              filters.push(<Filter filters={arr} title={key}/>);
+            });
+
+            return (
+                <div> {filters} </div>
+            );
+          }
+      }
+
+      class FilterPane extends React.Component {
+          render() {
+              return (
+                  <div>
+                    <h4> Filters </h4>
+                    <Filters models={this.props.models}/>
+                    <button type="button" class="btn btn-primary">Search</button>
+                  </div>
+              );
+          }
       }
 
       class PictureComponent extends React.Component {
@@ -231,17 +272,10 @@
       }
 
 
-      // Create a function to wrap up your component
-      function App(){
-        return(
-        <div>
-          <ShoppingList name="@luispagarcia on Dev.to!"/>
-        </div>
-        );
-      }
-
-      function App2() {
+      function App() {
         // FIREBASE CONFIG HERE ... ?
+        
+        
 
         firebase.initializeApp(firebaseConfig);
         //var img = document.getElementById('imgA');
@@ -250,20 +284,31 @@
 
         return (
           <div>
-            <PictureComponent src={src} card-title="Mercedes-Benz SLS AMG" year="2017"/>
+            <PictureComponent src={src} title="Mercedes-Benz SLS AMG" year="2017"/>
           </div>
         );
       }
 
-      // Use the ReactDOM.render to show your component on the browser
+      function FilterPaneMethod() {
+          const data = [
+          {
+            'brand': 'Mercedes',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible'
+          }];
+
+          return <FilterPane models={data}/>;
+      }
+
       ReactDOM.render(
         <App />,
-        rootElement
+        testA
       );
 
       ReactDOM.render(
-        <App2 />,
-        testA
+        <FilterPaneMethod/>,
+        filterPaneContainer
       );
   </script>
 
