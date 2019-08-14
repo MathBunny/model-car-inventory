@@ -138,12 +138,13 @@
         }
 
         render() {
-          const data = [{
-            'brand': 'Mercedes',
+          const fbData = [{
+            'brand': 'Mercedes-Benz',
             'model': 'SLS AMG',
             'color': 'silver',
             'type': 'convertible',
-            'year': '2017'
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
           }];
 
           return (
@@ -151,13 +152,13 @@
               <br/><br/>
               <div class="row">
                 <div class="col-2" style={{marginLeft: '20px'}}>
-                  <FilterPane callback={this.handleFiltering.bind(this)} models={data}/>
+                  <FilterPane callback={this.handleFiltering.bind(this)} models={fbData}/>
                 </div>
                 <div class="verticalLine"></div>
                 <div class="col-8">
                   <div class="container">
                     <div class="row">
-                      {/*<PageView data={data} disabled={this.state.disabled}/>*/}
+                      <PageView data={JSON.stringify(fbData)} disabled={this.state.disabled}/>
                       <div id="testA"> </div>
                     </div>
                   </div>
@@ -171,7 +172,7 @@
       class PageView extends React.Component {
         render() {
           let arr = [];
-          this.props.data = this.props.data;
+          this.props.data = JSON.parse(this.props.data);
           for (let x = 0; x < this.props.data.length; x++) {
             if (arr.length > 9)
               break;
@@ -188,7 +189,7 @@
             }
           }
           // Load images for those in the array!
-          arr.map(entry => <PictureComponent src={entry['src']} title={entry['model']} year={entry['year']}/>);
+          arr = arr.map(entry => <PictureComponent src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
 
           let endPageNum = `${Math.ceil(arr.length / 9)}`
           let paginator = <Pagination startPage="1" endPage={endPageNum} currPage="1"/>
@@ -461,8 +462,7 @@
       }
 
       function FilterPaneMethod() {
-          const data = [
-          {
+          const data = [{
             'brand': 'Mercedes',
             'model': 'SLS AMG',
             'color': 'silver',
@@ -485,7 +485,7 @@
       ReactDOM.render(
         <Gallery/>,
         root
-        )
+      );
 
       // ReactDOM.render(<Pagination startPage="1" endPage="3" currPage="1"/>, paginationContainer);
   </script>
