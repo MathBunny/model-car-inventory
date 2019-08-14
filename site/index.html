@@ -123,23 +123,6 @@
       const rootElement = document.getElementById('root');
       const rootElement2 = document.getElementById('testA');
 
-      class FilterRow extends React.Component {
-        handleCheck(e) {
-          console.log(e);
-        }
-
-        render() {
-          const filter = capitalizeFirstLetter(this.props.filter);
-
-          return (
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" onChange={this.handleCheck.bind(this)}/>
-              <label class="form-check-label" for="inlineCheckbox1">{filter}</label>
-            </div>
-          );
-        }
-      }
-
       class Gallery extends React.Component {
         constructor(props) {
           super(props);
@@ -148,6 +131,10 @@
 
         handlePageSet(pageNumber) {
           this.setState({'currPage': pageNumber + ''});
+        }
+
+        handleFiltering(filterArr) {
+          this.setState({'disabled': filterArr});
         }
 
         render() {
@@ -164,7 +151,7 @@
               <br/><br/>
               <div class="row">
                 <div class="col-2" style={{marginLeft: '20px'}}>
-                  <FilterPane models={data}/>
+                  <FilterPane callback={this.handleFiltering.bind(this)} models={data}/>
                 </div>
                 <div class="verticalLine"></div>
                 <div class="col-8">
@@ -299,6 +286,29 @@
           }
       }
 
+      class FilterRow extends React.Component {
+        constructor (props) {
+          super(props);
+          this.state = { 'set': false };
+        }
+
+        handleCheck(e) {
+          this.state.set = !this.state.set;
+          this.props.callback(this.props.title, this.props.filter, this.state.set);
+        }
+
+        render() {
+          const filter = capitalizeFirstLetter(this.props.filter);
+
+          return (
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="checked" onChange={this.handleCheck.bind(this)} />
+              <label class="form-check-label active" for="inlineCheckbox1">{filter}</label>
+            </div>
+          );
+        }
+      }
+
       class FilterTitle extends React.Component {
         render() {
             const title = `${capitalizeFirstLetter(this.props.title)}s`;
@@ -307,11 +317,10 @@
       };
 
       class Filter extends React.Component {
-
         render() {
           const rows = [];
           this.props.filters.forEach(filter => {
-              rows.push(<FilterRow key={this.props.title} filter={filter}/>);
+              rows.push(<FilterRow callback={this.props.callback} title={this.props.title} filter={filter}/>);
           });
 
           return (
@@ -353,8 +362,7 @@
               for (let o of attrib.get(key)) {
                 arr.push(o);
               }
-
-              filters.push(<Filter filters={arr} title={key}/>);
+              filters.push(<Filter callback={this.props.callback} filters={arr} title={key}/>);
             });
 
             return (
@@ -364,12 +372,52 @@
       }
 
       class FilterPane extends React.Component {
+          constructor (props) {
+            super(props);
+            this.state = {};
+          }
+
+          toggleAll() {
+            Array.from(document.getElementsByClassName('form-check-input')).forEach(item => item.click());
+          }
+
+          updateParent() {
+            const arr = [];
+
+            for (let o of Object.keys(this.state)) {
+              if (this.state[o] == false) {
+                let vals = o.split('-');
+                let resp = {};
+                resp[vals[0]] = vals[1];
+                arr.push(resp);
+              }
+            }
+
+            this.props.callback(arr);
+          }
+
+          callback(key, value, unset) {
+            let diffObj = {};
+            if (!unset) {
+              diffObj[key + '-' + value] = false;
+            }
+            else {
+              diffObj[key + '-' + value] = true;
+            }
+
+            this.setState(diffObj);
+          }
+
+          componentDidMount() {
+            this.toggleAll();
+          }
+
           render() {
               return (
                   <div>
                     <h4> Filters </h4>
-                    <Filters models={this.props.models}/>
-                    <button type="button" class="btn btn-outline-primary">Toggle</button> <button type="button" class="btn btn-primary">Search</button>
+                    <Filters callback={this.callback.bind(this)} models={this.props.models}/>
+                    <button type="button" id="toggle" class="btn btn-outline-primary" onClick={this.toggleAll}>Toggle</button> <button type="button" class="btn btn-primary" onClick={this.updateParent.bind(this)}>Search</button>
                   </div>
               );
           }
