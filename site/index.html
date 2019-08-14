@@ -54,6 +54,7 @@
     </div>
   </nav>
 
+<!--
   <div class="container">
       <br><br>
       <div class="row">
@@ -66,45 +67,13 @@
         
       </div>
       <div class="col-8">
-
-
         <div class="container">
           <div class="row">
             <div id="testA">
             </div>
-            <!-- 
-            <div class="col3">
-              <div class="container">
-                <div class="card bg-dark text-white">
-                    <img height="180" id='imgA'/>
-                    <div class="card-img-overlay">
-                      <h5 class="card-title">Mercedes-Benz SLS AMG</h5>
-                      <br><br><br><br>
-                      <p class="card-text" style="text-align:right">2017</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            -->
-              <div class="col3">
-                <div class="container">
-                  <div class="card bg-dark text-white">
-                      <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
-                        <rect fill="#868e96" width="100%" height="100%"></rect>
-                      </svg>
-
-                      <div class="card-img-overlay">
-                        <h5 class="card-title">Card title </h5>
-                        <p class="card-text">TemporaryB</p>
-                        <p class="card-text">Last updated 3 mins ago </p>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-
+          </div>
         </div>
-      </div>
-      <br><br>
+        <br><br>
 
         <div class="container">
           <div class="row">
@@ -139,24 +108,11 @@
                   </div>
             </div>
         </div>
+        <div id="paginationContainer"></div>
+
         <br><br>
-        <nav aria-label="...">
-          <ul class="pagination">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item active" aria-current="page">
-              <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
       </div>
-    </div>
+    </div>-->
     <div id="root"></div>
 
   <!-- </div> -->
@@ -169,7 +125,7 @@
 
       class FilterRow extends React.Component {
         handleCheck(e) {
-          console.log(e); 
+          console.log(e);
         }
 
         render() {
@@ -181,22 +137,181 @@
               <label class="form-check-label" for="inlineCheckbox1">{filter}</label>
             </div>
           );
-        };
-      };
+        }
+      }
 
+      class Gallery extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { 'disabled': [], 'pageNumber': 1 };
+        }
+
+        handlePageSet(pageNumber) {
+          this.setState({'currPage': pageNumber + ''});
+        }
+
+        render() {
+          const data = [{
+            'brand': 'Mercedes',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017'
+          }];
+
+          return (
+            <div class="container">
+              <br/><br/>
+              <div class="row">
+                <div class="col-2" style={{marginLeft: '20px'}}>
+                  <FilterPane models={data}/>
+                </div>
+                <div class="verticalLine"></div>
+                <div class="col-8">
+                  <div class="container">
+                    <div class="row">
+                      {/*<PageView data={data} disabled={this.state.disabled}/>*/}
+                      <div id="testA"> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class PageView extends React.Component {
+        render() {
+          let arr = [];
+          this.props.data = this.props.data;
+          for (let x = 0; x < this.props.data.length; x++) {
+            if (arr.length > 9)
+              break;
+
+            let valid = true;
+            for (let x = 0; x < this.props.disabled.length; x++) {
+              if (this.props.data[x][this.props.disabled[x]['key']] === this.props.disabled[x]['value']) {
+                valid = false;
+                break;
+              }
+            }
+            if (valid) {
+              arr.push(this.props.data[x]);
+            }
+          }
+          // Load images for those in the array!
+          arr.map(entry => <PictureComponent src={entry['src']} title={entry['model']} year={entry['year']}/>);
+
+          let endPageNum = `${Math.ceil(arr.length / 9)}`
+          let paginator = <Pagination startPage="1" endPage={endPageNum} currPage="1"/>
+
+          return (
+            <div>
+            {arr}
+            {paginator}
+           </div>);
+        };
+      }
+
+      class PaginationItem extends React.Component {
+         handleClick = () => {
+            this.props.setPage(this.props.pageNumber);
+         }
+
+         render() {
+            console.log('rendering!');
+            if (this.props.type === "prev") {
+              if (this.props.enabled === "true") {
+                  return <li class="page-item"><a class="page-link" onClick={this.handleClick} href="#" tabindex="-1" aria-disabled="false">Previous</a></li>;
+              }
+              return <li class="page-item disabled"><a class="page-link" onClick={this.handleClick} href="#" tabindex="-1" aria-disabled="true">Previous</a></li>;
+            }
+            else if (this.props.type === "next") {
+              if (this.props.enabled == "true") {
+                return <li class="page-item"><a class="page-link" onClick={this.handleClick} href="#">Next</a></li>;
+              }
+              else {
+                return <li class="page-item disabled"><a class="page-link" onClick={this.handleClick} href="#">Next</a></li>;
+              }
+            }
+            else {
+              if (this.props.enabled === "true") {
+                return (<li class="page-item active" aria-current="page"><a onClick={this.handleClick} class="page-link" href="#">{this.props.pageNumber} <span class="sr-only">(current)</span></a></li>);
+              } else {
+                return (<li class="page-item"><a class="page-link" onClick={this.handleClick} href="#">{this.props.pageNumber}</a></li>);
+              }
+            }
+         }
+      }
+
+
+      class Pagination extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = {'currPage': '1'};
+            this.handleClick = this.handleClick.bind(this);
+          }
+
+          handleClick(pageNumber) {
+             this.props.handlePageSet(pageNumber);
+          }
+
+          render() {
+            let ticks = [];
+
+            let startPage = parseInt(this.props.startPage);
+            let endPage = parseInt(this.props.endPage);
+            let currPage = parseInt(this.state.currPage);
+
+            if (currPage == startPage) {
+              ticks.push(<PaginationItem type="prev" pageNumber={currPage - 1} setPage={this.handleClick} enabled="false"/>);
+            }
+            else {
+              ticks.push(<PaginationItem type="prev" pageNumber={currPage - 1} setPage={this.handleClick} enabled="true"/>);
+            }
+
+            for (let x = startPage; x <= endPage; x++) {
+              if (x === currPage) {
+                ticks.push(<PaginationItem setPage={this.handleClick} pageNumber={x} enabled="true"/>);
+              } else {
+                ticks.push(<PaginationItem setPage={this.handleClick} pageNumber={x} enabled="false"/>);
+              }
+            }
+
+            if (currPage != endPage) {
+              ticks.push(<PaginationItem type="next" pageNumber={currPage + 1} setPage={this.handleClick} enabled="true"/>);
+            }
+            else {
+              ticks.push(<PaginationItem type="next" pageNumber={currPage + 1} setPage={this.handleClick} enabled="false"/>);
+            }
+
+            return (
+              <div>
+                <br/>
+                <nav aria-label="...">
+                  <ul class="pagination">
+                    {ticks}
+                  </ul>
+                </nav>
+              </div>
+            );
+          }
+      }
 
       class FilterTitle extends React.Component {
         render() {
-            const title = capitalizeFirstLetter(this.props.title);
+            const title = `${capitalizeFirstLetter(this.props.title)}s`;
             return (<h6>{title}</h6>);
         };
       };
 
       class Filter extends React.Component {
+
         render() {
           const rows = [];
           this.props.filters.forEach(filter => {
-              rows.push(<FilterRow filter={filter}/>);
+              rows.push(<FilterRow key={this.props.title} filter={filter}/>);
           });
 
           return (
@@ -214,9 +329,17 @@
             const models = this.props.models;
             const attrib = new Map();
 
+            const blacklist = new Set();
+            blacklist.add('model');
+            blacklist.add('src');
+
             models.forEach(model => {
                 const keys = Object.keys(model);
-                keys.forEach((key) => {
+                keys.filter(key => !blacklist.has(key)).forEach((key) => {
+                    if (!blacklist.has(key)) {
+
+                    }
+
                     if (attrib.get(key) === undefined) {
                         attrib.set(key, new Set());
                     }
@@ -246,7 +369,7 @@
                   <div>
                     <h4> Filters </h4>
                     <Filters models={this.props.models}/>
-                    <button type="button" class="btn btn-primary">Search</button>
+                    <button type="button" class="btn btn-outline-primary">Toggle</button> <button type="button" class="btn btn-primary">Search</button>
                   </div>
               );
           }
@@ -295,21 +418,28 @@
             'brand': 'Mercedes',
             'model': 'SLS AMG',
             'color': 'silver',
-            'type': 'convertible'
+            'type': 'convertible',
+            'year': '2017'
           }];
 
           return <FilterPane models={data}/>;
       }
 
-      ReactDOM.render(
-        <App />,
-        testA
-      );
+     /* ReactDOM.render(
+        <App/>,
+        root
+      );*/
 
-      ReactDOM.render(
-        <FilterPaneMethod/>,
+      /*ReactDOM.render(
+        <Gallery/>,
         filterPaneContainer
-      );
+      );*/
+      ReactDOM.render(
+        <Gallery/>,
+        root
+        )
+
+      // ReactDOM.render(<Pagination startPage="1" endPage="3" currPage="1"/>, paginationContainer);
   </script>
 
   <script>
