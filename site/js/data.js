@@ -1,7 +1,4 @@
 
-function getCars() {
-
-}
 
 function capitalizeFirstLetter(string) {
     if (string === undefined)

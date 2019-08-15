@@ -18,12 +18,8 @@
   <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
   <script src="./js/data.js"></script>
 
-  <style>
-    .verticalLine {
-      border-left: thin solid #000000;
-    }
+  <link rel="stylesheet" href="./css/stylesheet.css">
 
-  </style>
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
@@ -65,12 +61,11 @@
         constructor(props) {
           super(props);
           // Make variable names more consistent
-          this.state = { 'disabled': [], 'pageNumber': 1, 'startPageNum': 1, 'endPageNum': 1, 'numPages': 1 };
+          this.state = { 'disabled': [], 'pageNumber': 1, 'startPageNum': 1, 'endPageNum': 1, 'numPages': 1, 'modelData': [] };
         }
 
         handlePageSet(pageNumber) {
-          console.log(pageNumber + ' <--- ');
-          this.setState({'pageNumber': pageNumber}); // currPage + ''
+          this.setState({'pageNumber': pageNumber});
         }
 
         handleFiltering(filterArr) {
@@ -78,97 +73,127 @@
         }
 
         handleNumPages(pageCount) {
-          console.log(pageCount);
           this.setState({ 'numPages': pageCount, 'endPageNum': pageCount });
         }
 
+        getModelData() {
+            
+                
+            firebase.initializeApp(firebaseConfig);
+
+            let db = firebase.firestore();
+            let res = [];
+
+            db.collection("cars").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(`${doc.id} => ${doc.data()}`);
+                    res.push(doc.data());
+                });
+                console.log('set!');
+                this.setState({'modelData': res});
+            });
+            return res;
+            //var userId = firebase.auth().currentUser.uid;
+            //var ref = firebase.database().ref(`/cars/${userId}`).once('value').then((snapshot) => {
+            //  console.log(snapshot);
+            //});
+        }
+
+
         render() {
-          const fbData = [{
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          },
-          {
-            'brand': 'Mercedes-Benz',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017',
-            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          if (this.modelData == undefined) {
+            this.modelData = this.getModelData();
+            /*
+            // fetch data
+            this.modelData = [{
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            },
+            {
+              'brand': 'Mercedes-Benz',
+              'model': 'SLS AMG',
+              'color': 'silver',
+              'type': 'convertible',
+              'year': '2017',
+              'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+            }
+            ];
+            //this.modelData = this.modelData.slice(0, 1);
+            //console.log(this.modelData);*/
           }
-          ];
 
           return (
             <div class="container">
               <br/><br/>
               <div class="row">
                 <div class="col-2" style={{marginLeft: '20px'}}>
-                  <FilterPane callback={this.handleFiltering.bind(this)} models={fbData}/>
+                  <FilterPane callback={this.handleFiltering.bind(this)} models={this.state.modelData}/>
                 </div>
                 <div class="verticalLine"></div>
                 <div class="col-8">
                   <div class="container">
                     <div class="row">
-                      <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(fbData)} disabled={this.state.disabled} currPage={this.state.pageNumber}/>
+                      <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber}/>
                     </div>
                   </div>
                   <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber}/>
@@ -211,9 +236,8 @@
           arr = arr.slice(offset, offset + 8);
 
           let endPageNum = `numPages`;
-          // let paginator = <Pagination startPage="1" endPage={endPageNum} currPage="1"/>
 
-          let resp = [];
+          const resp = [];
           arr.forEach(entry => resp.push(entry));
           resp.push(<br/>);
           // resp.push(paginator);
@@ -468,72 +492,10 @@
         }
       }
 
-
-      function App() {
-        // FIREBASE CONFIG HERE ... ?
-        
-        
-
-        firebase.initializeApp(firebaseConfig);
-        //var img = document.getElementById('imgA');
-        //img.src = 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f';
-        let src = 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f';
-
-        return (
-            <PictureComponent src={src} title="Mercedes-Benz SLS AMG" year="2017"/>
-        );
-      }
-
-      function FilterPaneMethod() {
-          const data = [{
-            'brand': 'Mercedes',
-            'model': 'SLS AMG',
-            'color': 'silver',
-            'type': 'convertible',
-            'year': '2017'
-          }];
-
-          return <FilterPane models={data}/>;
-      }
-
-     /* ReactDOM.render(
-        <App/>,
-        root
-      );*/
-
-      /*ReactDOM.render(
-        <Gallery/>,
-        filterPaneContainer
-      );*/
       ReactDOM.render(
         <Gallery/>,
         root
       );
-
-      // ReactDOM.render(<Pagination startPage="1" endPage="3" currPage="1"/>, paginationContainer);
-  </script>
-
-  <script>
-    // Your web app's Firebase configuration
-    // INSERT CONFIG HERE
-
-    /*
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    let db = firebase.firestore();
-    db.collection("cars").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log(`${doc.id} => ${doc.data()}`);
-            console.log(doc.data());
-        });
-    });*/
-
-    /*var userId = firebase.auth().currentUser.uid;
-    var ref = firebase.database().ref(`/cars/${userId}`).once('value').then((snapshot) => {
-      console.log(snapshot);
-    });*/
-
   </script>
 
 </body>
