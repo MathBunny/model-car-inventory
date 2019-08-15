@@ -70,20 +70,18 @@
         }
 
         getModelData() {
-            
-                
-            firebase.initializeApp(firebaseConfig);
+            const http = new XMLHttpRequest();
+            const url ='https://us-central1-toy-car-visualizer.cloudfunctions.net/retrieveModels';
+            http.open("GET", url);
+            http.send();
 
-            let db = firebase.firestore();
-            let res = [];
+            // Properly use async/await
 
-            db.collection("cars").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    res.push(doc.data());
-                });
-                this.setState({'modelData': res});
-            });
-            return res;
+            http.onreadystatechange = (e) => {
+              const data = JSON.parse(http.responseText);
+              this.setState({'modelData': data['data']});
+            }
+            return [];
         }
 
 

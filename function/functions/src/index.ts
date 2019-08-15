@@ -5,6 +5,7 @@ const functions = require('firebase-functions');
 // http://localhost:5000/toy-car-visualizer/us-central1/retrieveModels
 
 export const retrieveModels = functions.https.onRequest((request: any, response: any) => {
+    response.set('Access-Control-Allow-Origin', "*")
     const firebaseConfig = {
       authDomain: 'toy-car-visualizer.firebaseapp.com',
       databaseURL: 'https://toy-car-visualizer.firebaseio.com',
