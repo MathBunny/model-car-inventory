@@ -19,15 +19,8 @@
   <script src="./js/data.js"></script>
 
   <link rel="stylesheet" href="./css/stylesheet.css">
-
-
-  <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase.js"></script>
-  <!-- <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script> -->
-
-  <!-- TODO: Add SDKs for Firebase products that you want to use
-       https://firebase.google.com/docs/web/setup#config-web-app -->
 
 </head>
 
@@ -44,7 +37,7 @@
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Classify</a>
+          <a class="nav-link" href="classify.html">Classify</a>
         </li>
       </ul>
     </div>
@@ -86,17 +79,11 @@
 
             db.collection("cars").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    console.log(`${doc.id} => ${doc.data()}`);
                     res.push(doc.data());
                 });
-                console.log('set!');
                 this.setState({'modelData': res});
             });
             return res;
-            //var userId = firebase.auth().currentUser.uid;
-            //var ref = firebase.database().ref(`/cars/${userId}`).once('value').then((snapshot) => {
-            //  console.log(snapshot);
-            //});
         }
 
 
@@ -209,10 +196,6 @@
           let arr = [];
           this.props.data = JSON.parse(this.props.data);
           for (let x = 0; x < this.props.data.length; x++) {
-            // Note: You need to get the count to compute the number of pages!
-            // if (arr.length > 9)
-              // break;
-
             let valid = true;
             for (let x = 0; x < this.props.disabled.length; x++) {
               if (this.props.data[x][this.props.disabled[x]['key']] === this.props.disabled[x]['value']) {
@@ -240,7 +223,6 @@
           const resp = [];
           arr.forEach(entry => resp.push(entry));
           resp.push(<br/>);
-          // resp.push(paginator);
           return resp;
           /*
           return (
