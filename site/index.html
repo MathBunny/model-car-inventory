@@ -53,69 +53,7 @@
       </ul>
     </div>
   </nav>
-
-<!--
-  <div class="container">
-      <br><br>
-      <div class="row">
-        <div class="col-2" style="margin-left:20px">
-          <div id="filterPaneContainer">
-
-          </div>
-        </div>
-      <div class="verticalLine">
-        
-      </div>
-      <div class="col-8">
-        <div class="container">
-          <div class="row">
-            <div id="testA">
-            </div>
-          </div>
-        </div>
-        <br><br>
-
-        <div class="container">
-          <div class="row">
-            <div class="col3">
-              <div class="container">
-                <div class="card bg-dark text-white">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
-                      <rect fill="#868e96" width="100%" height="100%"></rect>
-                    </svg>
-
-                    <div class="card-img-overlay">
-                      <h5 class="card-title">Card title </h5>
-                      <p class="card-text">TemporaryC</p>
-                      <p class="card-text">Last updated 3 mins ago </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col3">
-                <div class="container">
-                  <div class="card bg-dark text-white">
-                      <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Image cap">
-                        <rect fill="#868e96" width="100%" height="100%"></rect>
-                      </svg>
-
-                      <div class="card-img-overlay">
-                        <h5 class="card-title">Card title </h5>
-                        <p class="card-text">TemporaryD</p>
-                        <p class="card-text">Last updated 3 mins ago </p>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-        </div>
-        <div id="paginationContainer"></div>
-
-        <br><br>
-      </div>
-    </div>-->
     <div id="root"></div>
-
-  <!-- </div> -->
 
 
   <script type="text/babel">
@@ -126,15 +64,22 @@
       class Gallery extends React.Component {
         constructor(props) {
           super(props);
-          this.state = { 'disabled': [], 'pageNumber': 1 };
+          // Make variable names more consistent
+          this.state = { 'disabled': [], 'pageNumber': 1, 'startPageNum': 1, 'endPageNum': 1, 'numPages': 1 };
         }
 
         handlePageSet(pageNumber) {
-          this.setState({'currPage': pageNumber + ''});
+          console.log(pageNumber + ' <--- ');
+          this.setState({'pageNumber': pageNumber}); // currPage + ''
         }
 
         handleFiltering(filterArr) {
           this.setState({'disabled': filterArr});
+        }
+
+        handleNumPages(pageCount) {
+          console.log(pageCount);
+          this.setState({ 'numPages': pageCount, 'endPageNum': pageCount });
         }
 
         render() {
@@ -145,7 +90,72 @@
             'type': 'convertible',
             'year': '2017',
             'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
-          }];
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          },
+          {
+            'brand': 'Mercedes-Benz',
+            'model': 'SLS AMG',
+            'color': 'silver',
+            'type': 'convertible',
+            'year': '2017',
+            'src': 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f'
+          }
+          ];
 
           return (
             <div class="container">
@@ -158,10 +168,10 @@
                 <div class="col-8">
                   <div class="container">
                     <div class="row">
-                      <PageView data={JSON.stringify(fbData)} disabled={this.state.disabled}/>
-                      <div id="testA"> </div>
+                      <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(fbData)} disabled={this.state.disabled} currPage={this.state.pageNumber}/>
                     </div>
                   </div>
+                  <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber}/>
                 </div>
               </div>
             </div>
@@ -174,8 +184,9 @@
           let arr = [];
           this.props.data = JSON.parse(this.props.data);
           for (let x = 0; x < this.props.data.length; x++) {
-            if (arr.length > 9)
-              break;
+            // Note: You need to get the count to compute the number of pages!
+            // if (arr.length > 9)
+              // break;
 
             let valid = true;
             for (let x = 0; x < this.props.disabled.length; x++) {
@@ -190,15 +201,29 @@
           }
           // Load images for those in the array!
           arr = arr.map(entry => <PictureComponent src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
+          
+          let numPages = Math.ceil(arr.length / 8);
+          if (this.props.numPages != numPages) {
+              this.props.callback(numPages);
+          }
 
-          let endPageNum = `${Math.ceil(arr.length / 9)}`
-          let paginator = <Pagination startPage="1" endPage={endPageNum} currPage="1"/>
+          let offset = (this.props.currPage * 8) - 8;
+          arr = arr.slice(offset, offset + 8);
 
+          let endPageNum = `numPages`;
+          // let paginator = <Pagination startPage="1" endPage={endPageNum} currPage="1"/>
+
+          let resp = [];
+          arr.forEach(entry => resp.push(entry));
+          resp.push(<br/>);
+          // resp.push(paginator);
+          return resp;
+          /*
           return (
             <div>
             {arr}
             {paginator}
-           </div>);
+           </div>);*/
         };
       }
 
@@ -208,7 +233,6 @@
          }
 
          render() {
-            console.log('rendering!');
             if (this.props.type === "prev") {
               if (this.props.enabled === "true") {
                   return <li class="page-item"><a class="page-link" onClick={this.handleClick} href="#" tabindex="-1" aria-disabled="false">Previous</a></li>;
@@ -237,11 +261,12 @@
       class Pagination extends React.Component {
           constructor(props) {
             super(props);
-            this.state = {'currPage': '1'};
+            this.state = {'currPage': this.props.currPage + ''};
             this.handleClick = this.handleClick.bind(this);
           }
 
           handleClick(pageNumber) {
+             this.setState({'currPage': pageNumber + ''});
              this.props.handlePageSet(pageNumber);
           }
 
@@ -426,7 +451,7 @@
 
       class PictureComponent extends React.Component {
         render() {
-          return (
+          return [
             <div class="col3">
               <div class="container">
                 <div class="card bg-dark text-white">
@@ -439,7 +464,7 @@
                 </div>
               </div>
             </div>
-          );
+          ];
         }
       }
 
@@ -455,9 +480,7 @@
         let src = 'https://firebasestorage.googleapis.com/v0/b/toy-car-visualizer.appspot.com/o/testCar.jpg?alt=media&token=e1e5588a-9ef2-4f12-85d6-2579644b9f0f';
 
         return (
-          <div>
             <PictureComponent src={src} title="Mercedes-Benz SLS AMG" year="2017"/>
-          </div>
         );
       }
 
