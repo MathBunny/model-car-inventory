@@ -64,6 +64,7 @@
         }
 
         handleNumPages(pageCount) {
+          // Duplicate variables?
           this.setState({ 'numPages': pageCount, 'endPageNum': pageCount });
         }
 
@@ -193,8 +194,8 @@
           this.props.data = JSON.parse(this.props.data);
           for (let x = 0; x < this.props.data.length; x++) {
             let valid = true;
-            for (let x = 0; x < this.props.disabled.length; x++) {
-              if (this.props.data[x][this.props.disabled[x]['key']] === this.props.disabled[x]['value']) {
+            for (let y = 0; y < this.props.disabled.length; y++) {
+              if (this.props.data[x][Object.keys(this.props.disabled[y])[0]] === this.props.disabled[y][Object.keys(this.props.disabled[y])[0]]) {
                 valid = false;
                 break;
               }
@@ -203,6 +204,7 @@
               arr.push(this.props.data[x]);
             }
           }
+
           // Load images for those in the array!
           arr = arr.map(entry => <PictureComponent src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
           
@@ -329,13 +331,25 @@
           this.props.callback(this.props.title, this.props.filter, this.state.set);
         }
 
+        componentDidMount() {
+          let arr = Array.from(document.getElementsByClassName('form-check-input'));
+          for(let x = 0; x < arr.length; x++) {
+            if (arr[x].checked == false) {
+              arr[x].click();
+            }
+          }
+        }
+
         render() {
           const filter = capitalizeFirstLetter(this.props.filter);
 
           return (
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="checked" onChange={this.handleCheck.bind(this)} />
-              <label class="form-check-label active" for="inlineCheckbox1">{filter}</label>
+            <div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="checked" onChange={this.handleCheck.bind(this)} />
+                <label class="form-check-label active" for="inlineCheckbox1">{filter}</label>
+              </div>
+              <br/>
             </div>
           );
         }
@@ -424,7 +438,6 @@
                 arr.push(resp);
               }
             }
-
             this.props.callback(arr);
           }
 
@@ -445,13 +458,13 @@
           }
 
           render() {
-              return (
-                  <div>
-                    <h4> Filters </h4>
-                    <Filters callback={this.callback.bind(this)} models={this.props.models}/>
-                    <button type="button" id="toggle" class="btn btn-outline-primary" onClick={this.toggleAll}>Toggle</button> <button type="button" class="btn btn-primary" onClick={this.updateParent.bind(this)}>Search</button>
-                  </div>
-              );
+            return (
+              <div>
+                <h4> Filters </h4>
+                <Filters callback={this.callback.bind(this)} models={this.props.models}/>
+                <button type="button" id="toggle" class="btn btn-outline-primary" onClick={this.toggleAll}>Toggle</button> <button type="button" class="btn btn-primary" onClick={this.updateParent.bind(this)}>Search</button>
+              </div>
+            );
           }
       }
 
