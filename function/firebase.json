@@ -4,5 +4,16 @@
       "npm --prefix \"$RESOURCE_DIR\" run lint",
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
-  }
+  },
+  "headers": [
+    {
+      "source": "*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+           "value": "*"
+         }
+      ]
+    }
+  ]
 }

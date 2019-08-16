@@ -1,3 +1,4 @@
+const cors = require('cors')({origin: true});
 const firebase = require('firebase-admin');
 const functions = require('firebase-functions');
 
@@ -5,30 +6,43 @@ const functions = require('firebase-functions');
 // http://localhost:5000/toy-car-visualizer/us-central1/retrieveModels
 
 export const retrieveModels = functions.https.onRequest((request: any, response: any) => {
-    response.set('Access-Control-Allow-Origin', "*")
-    const firebaseConfig = {
-      authDomain: 'toy-car-visualizer.firebaseapp.com',
-      databaseURL: 'https://toy-car-visualizer.firebaseio.com',
-      projectId: 'toy-car-visualizer',
-      storageBucket: '',
-      messagingSenderId: '30835560445',
-      appId: '1:30835560445:web:e7fa1a767bbebdce'
-    };
-        
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    cors(request, response, () => {
+        response.set('Access-Control-Allow-Origin', '*');
+        response.set('Access-Control-Allow-Methods', 'GET');
+        response.set('Access-Control-Allow-Headers', 'Content-Type');
+        response.set('Access-Control-Max-Age', '3600');
 
-    const res: any[] = [];
+        const firebaseConfig = {
+          authDomain: 'toy-car-visualizer.firebaseapp.com',
+          databaseURL: 'https://toy-car-visualizer.firebaseio.com',
+          projectId: 'toy-car-visualizer',
+          storageBucket: '',
+          messagingSenderId: '30835560445',
+          appId: '1:30835560445:web:e7fa1a767bbebdce'
+        };
 
-    db.collection("cars").get().then((querySnapshot: any) => {
-        querySnapshot.forEach((doc:any) => {
-            res.push(doc.data());
+        let db: any = {};
+            
+        try {
+            db = firebase.firestore();
+        }
+        catch(err) {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        }
+
+        const res: any[] = [];
+
+        db.collection("cars").get().then((querySnapshot: any) => {
+            querySnapshot.forEach((doc:any) => {
+                res.push(doc.data());
+            });
+
+            console.log('Successfully retrieved!');
+            response.send( {'data': res } );
+        }).catch((e: any) => {
+            console.log('Promise Rejected ' + e);
+            response.send( {'data': [] } );
         });
-
-        console.log('Successfully retrieved!');
-        response.send( {'data': res} );
-    }).catch((e: any) => {
-        console.log('Promise Rejected ' + e);
-        response.send( {'data': []} );
     });
 });
