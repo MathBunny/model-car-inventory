@@ -112,7 +112,7 @@
 
       class PageView extends React.Component {
         render() {
-          const RES_PER_PAGE = 16;
+          const RES_PER_PAGE = 20;
 
           let arr = [];
           this.props.data = JSON.parse(this.props.data);
@@ -399,6 +399,8 @@
                 <Filters update={this.updateParent.bind(this)} callback={this.callback.bind(this)} models={this.props.models}/>
                 <br/>
                 <button type="button" id="toggle" class="btn btn-outline-primary" onClick={this.toggleAll}>Toggle</button> <button type="button" class="btn btn-primary" onClick={this.updateParent.bind(this)}>Search</button>
+                <br/>
+                <br/>
               </div>
             );
           }
