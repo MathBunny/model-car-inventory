@@ -345,6 +345,8 @@
               for (let o of attrib.get(key)) {
                 arr.push(o);
               }
+
+              arr.sort();
               filters.push(<Filter update={this.props.update} callback={this.props.callback} filters={arr} title={key}/>);
             });
 
