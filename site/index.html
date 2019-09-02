@@ -99,7 +99,7 @@
                 <div class="col-8">
                   <div class="container">
                     <div class="row">
-                      <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber}/>
+                      <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber} numRes={this.state.resultCount}/>
                     </div>
                   </div>
                   <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber} numRes={this.state.resultCount} />
@@ -131,9 +131,10 @@
 
           // Load images for those in the array!
           arr = arr.map(entry => <PictureComponent src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
+
           
           let numPages = Math.ceil(arr.length / RES_PER_PAGE);
-          if (this.props.numPages != numPages) {
+          if (this.props.numPages != numPages || this.props.numRes != arr.length) {
               this.props.callback(numPages, arr.length);
           }
 
