@@ -62,9 +62,9 @@
           this.setState({'disabled': filterArr, 'pageNumber': 1});
         }
 
-        handleNumPages(pageCount) {
+        handleNumPages(pageCount, results) {
           // Duplicate variables?
-          this.setState({ 'numPages': pageCount, 'endPageNum': Math.max(1, pageCount) });
+          this.setState({ 'numPages': pageCount, 'endPageNum': Math.max(1, pageCount), 'resultCount': results });
         }
 
         getModelData() {
@@ -102,7 +102,7 @@
                       <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber}/>
                     </div>
                   </div>
-                  <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber} numRes={this.state.modelData.length} />
+                  <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber} numRes={this.state.resultCount} />
                 </div>
               </div>
             </div>
@@ -134,7 +134,7 @@
           
           let numPages = Math.ceil(arr.length / RES_PER_PAGE);
           if (this.props.numPages != numPages) {
-              this.props.callback(numPages);
+              this.props.callback(numPages, arr.length);
           }
 
           let offset = (this.props.currPage * RES_PER_PAGE) - RES_PER_PAGE;
@@ -233,6 +233,7 @@
                     {ticks}
                   </ul>
                 </nav>
+                <p> Result count: {this.props.numRes} </p>
                {/* <p> Result count: {this.props.numRes} </p> */}
               </div>
             );
