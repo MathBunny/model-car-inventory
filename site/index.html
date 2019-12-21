@@ -70,6 +70,11 @@
           this.setState({ 'numPages': pageCount, 'endPageNum': Math.max(1, pageCount), 'resultCount': results });
         }
 
+        handleModalSelection(title, src) {
+          console.log('ok!');
+          this.setState({ 'titleSelected': title, 'srcSelected': src});
+        }
+
         getModelData() {
             const http = new XMLHttpRequest();
             const url ='https://us-central1-toy-car-visualizer.cloudfunctions.net/retrieveModels';
@@ -86,6 +91,7 @@
 
 
         render() {
+
           if (this.modelData == undefined) {
             this.modelData = this.getModelData();
           }
@@ -100,9 +106,10 @@
                 </div>
                 
                 <div class="col-8">
+                  <ModalContainer title={this.state.titleSelected} src={this.state.srcSelected}/>
                   <div class="container">
                     <div class="row">
-                        <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber} numRes={this.state.resultCount}/>
+                        <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} modalCallback={this.handleModalSelection.bind(this)} currPage={this.state.pageNumber} numRes={this.state.resultCount}/>
                     </div>
                   </div>
                   <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber} numRes={this.state.resultCount} />
@@ -133,7 +140,7 @@
           }
 
           // Load images for those in the array!
-          arr = arr.map(entry => <PictureComponent src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
+          arr = arr.map(entry => <PictureComponent modalCallback={this.props.modalCallback} src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
 
           
           let numPages = Math.ceil(arr.length / RES_PER_PAGE);
@@ -322,6 +329,55 @@
         };
       };
 
+      class ModalContainer extends React.Component {
+        constructor (props) {
+          super(props);
+        }
+
+        //setContents(title, src) {
+          //this.setState({ title: title, src: src });
+        //}
+
+        componentDidUpdate() {
+          var btn = document.getElementById('expose-modal');
+          if (btn.length != 0) {
+            console.log('Good to click');
+            btn.click(); // could not have been created in the real DOM yet
+          }
+        }
+
+        render() {
+          return (
+            <Modal title={this.props.title} src={this.props.src}/>
+          );
+        }
+      }
+
+      class Modal extends React.Component {
+        render() {
+          return (
+            <div class="modal fade" id="carModal" tabindex="-1" role="dialog" aria-labelledby="carModal" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="carModalTitle">{this.props.title}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <center><img height="240" width="426" src={this.props.src} /> </center>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
       class Filters extends React.Component{
           render() {
             const models = this.props.models;
@@ -413,10 +469,11 @@
           }
       }
 
+      // modalCallback is responsible for managing the click event
       class PictureComponent extends React.Component {
         render() {
           return [
-            <div class="card bg-dark text-white">
+            <div class="card bg-dark text-white" onClick= { () => this.props.modalCallback(this.props.title, this.props.src) } >
               <img height="180" width="320" src={this.props.src}/> {/* {this.props.src} */}
               <div class="card-img-overlay">
                 <h5 class="card-title">{this.props.title}</h5>
@@ -433,6 +490,8 @@
         root
       );
   </script>
+
+  <button style="display:none;" id="expose-modal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#carModal">.</button>
 
 </body>
 
