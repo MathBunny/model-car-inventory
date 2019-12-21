@@ -54,7 +54,7 @@
         constructor(props) {
           super(props);
           // Make variable names more consistent
-          this.state = { 'disabled': [], 'pageNumber': 1, 'startPageNum': 1, 'endPageNum': 1, 'numPages': 1, 'modelData': [] };
+          this.state = { 'titleSelected': undefined, 'srcSelected': undefined, 'disabled': [], 'pageNumber': 1, 'startPageNum': 1, 'endPageNum': 1, 'numPages': 1, 'modelData': [] };
         }
 
         handlePageSet(pageNumber) {
@@ -71,7 +71,6 @@
         }
 
         handleModalSelection(title, src) {
-          console.log('ok!');
           this.setState({ 'titleSelected': title, 'srcSelected': src});
         }
 
@@ -340,9 +339,8 @@
 
         componentDidUpdate() {
           var btn = document.getElementById('expose-modal');
-          if (btn.length != 0) {
-            console.log('Good to click');
-            btn.click(); // could not have been created in the real DOM yet
+          if (btn.length != 0 && this.props.title != 'ok') {
+            btn.click(); // could not have been created in the real DOM yet, using sketchy fix to prevent the initial display on first component mount
           }
         }
 
@@ -355,6 +353,9 @@
 
       class Modal extends React.Component {
         render() {
+          if (this.props.title === undefined) {
+            return (<div></div>);
+          }
           return (
             <div class="modal fade" id="carModal" tabindex="-1" role="dialog" aria-labelledby="carModal" aria-hidden="true">
               <div class="modal-dialog" role="document">
