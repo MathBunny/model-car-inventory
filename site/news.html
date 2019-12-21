@@ -63,41 +63,14 @@
 
         render() {
           return (
-            <div class="container">
-              <div class="card" style={{width: '30rem'}}>
-                <img class="card-img-top" src={this.props.src} alt="Card image cap"/>
-                <div class="card-body">
-                  <h5 class="card-title" style={{display:'inline'}}>{this.props.title}</h5><i><h7 style={{display:'inline'}}>, Added on: {this.props.date}</h7></i>
-                  <p class="card-text" style={{textAlign:'center'}}>{this.props.content}</p>
-                  <center><a href="#" class="btn btn-primary">View Model</a></center>
-                </div>
+            <div class="card" style={{width: '30rem'}}>
+              <img class="card-img-top" src={this.props.src} alt="Card image cap"/>
+              <div class="card-body">
+                <h5 class="card-title" style={{display:'inline'}}>{this.props.title}</h5><i><h7 style={{display:'inline'}}>, Added on: {this.props.date}</h7></i>
+                <p class="card-text" style={{textAlign:'center'}}>{this.props.content}</p>
+                <center><a href={this.props.src} target="_blank" class="btn btn-primary">View Model</a></center>
               </div>
             </div>
-
-
-            /*
-            <div class="container">
-              <br/><br/>
-              <div class="row justify-content-md-center">
-
-                <div class="col-6">
-                  <div class="row">
-                    <h2> {this.props.title}</h2><p>|</p><h5>{this.props.date}</h5>
-                  </div>
-                  <hr style={{marginTop:'-10px'}}/>
-                  <div class="row">
-                    <p>{this.props.content}</p>
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="container">
-                    <div class="row">
-                      <img height="180" src={this.props.src}/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>*/
           );
         }
       }
@@ -106,33 +79,14 @@
       class NewsCollection extends React.Component {
         render() {
           return (
-            <div>
-              <br/>
-              <NewsEntry title="Aston Martin Vanquish" date="2019-12-20" content="This second-generation Vanquish was introduced in 2012, and was succeeded by the DBS Superleggera in 2018. It features a 5.9L V12 engine producing 542hp!" src="http://pickup.paperplane.io/cars/aston_martin_vanquish.jpg"/>
-              <NewsEntry title="Porsche GT3" date="2019-12-20" content="The 991.1 GT3 was produced from 2013-2016, and was succeeded by the 991.1 GT3 RS. It features a 3.8L flat V6 engine producing 469hp." src="http://pickup.paperplane.io/cars/porsche_911_gt3.jpg"/>
-            </div>
-          ); 
-
-          /*A second-generation "Vanquish" was introduced in 2012, based on the Gaydon VH architecture, followed in 2017 by a "Vanquish S" with a more powerful engine and improved aerodynamics. The second-generation Vanquish was succeeded by the DBS Superleggera in 2018*/
-        }
-      }
-
-      class PictureComponent extends React.Component {
-        render() {
-          return [
-            <div class="col3">
-              <div class="container">
-                <div class="card bg-dark text-white">
-                  <img height="180" src={this.props.src}/> {/* {this.props.src} */}
-                  <div class="card-img-overlay">
-                    <h5 class="card-title">{this.props.title}</h5>
-                    <br/><br/><br/><br/>
-                    <p class="card-text" style={{'text-align':'right'}}>{this.props.year}</p>
-                  </div>
+            <div class="container">
+                <br/>
+                <div class="row justify-content-md-center">
+                  <NewsEntry title="Aston Martin Vanquish" date="2019-12-20" content="This second-generation Vanquish was introduced in 2012, and was succeeded by the DBS Superleggera in 2018. It features a 5.9L V12 engine producing 542hp." src="http://pickup.paperplane.io/cars/aston_martin_vanquish.jpg"/>
+                  <NewsEntry title="Porsche GT3" date="2019-12-20" content="The 991.1 GT3 was produced from 2013-2016, and was succeeded by the 991.1 GT3 RS. It features a 3.8L flat V6 engine producing 469hp." src="http://pickup.paperplane.io/cars/porsche_911_gt3.jpg"/>
                 </div>
-              </div>
             </div>
-          ];
+          );
         }
       }
 
