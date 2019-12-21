@@ -58,7 +58,7 @@
         }
 
         handlePageSet(pageNumber) {
-          this.setState({'pageNumber': pageNumber});
+          this.setState({ 'pageNumber': pageNumber });
         }
 
         handleFiltering(filterArr) {
@@ -71,7 +71,7 @@
         }
 
         handleModalSelection(title, src) {
-          this.setState({ 'titleSelected': title, 'srcSelected': src});
+          this.setState({ 'titleSelected': title, 'srcSelected': src });
         }
 
         getModelData() {
@@ -197,12 +197,12 @@
       class Pagination extends React.Component {
           constructor(props) {
             super(props);
-            this.state = {'currPage': this.props.currPage + ''};
+            this.state = { 'currPage': this.props.currPage + '' };
             this.handleClick = this.handleClick.bind(this);
           }
 
           handleClick(pageNumber) {
-             this.setState({'currPage': pageNumber + ''});
+             this.setState({ 'currPage': pageNumber + '' });
              this.props.handlePageSet(pageNumber);
           }
 
@@ -333,10 +333,6 @@
           super(props);
         }
 
-        //setContents(title, src) {
-          //this.setState({ title: title, src: src });
-        //}
-
         componentDidUpdate() {
           var btn = document.getElementById('expose-modal');
           if (btn.length != 0 && this.props.title != 'ok') {
@@ -358,7 +354,7 @@
           }
           return (
             <div class="modal fade" id="carModal" tabindex="-1" role="dialog" aria-labelledby="carModal" aria-hidden="true">
-              <div class="modal-dialog" role="document">
+              <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="carModalTitle">{this.props.title}</h5>
@@ -367,7 +363,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <center><img height="240" width="426" src={this.props.src} /> </center>
+                    <center><img height="360" width="639" src={this.props.src} /> </center>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -391,7 +387,6 @@
             models.forEach(model => {
                 const keys = Object.keys(model);
                 keys.filter(key => !blacklist.has(key)).forEach((key) => {
-
                     if (attrib.get(key) === undefined) {
                         attrib.set(key, new Set());
                     }
