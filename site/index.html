@@ -62,7 +62,7 @@
         }
 
         handleFiltering(filterArr) {
-          this.setState({'disabled': filterArr, 'pageNumber': 1});
+          this.setState({ 'disabled': filterArr, 'pageNumber': 1 });
         }
 
         handleNumPages(pageCount, results) {
@@ -77,7 +77,6 @@
             http.send();
 
             // Properly use async/await
-
             http.onreadystatechange = (e) => {
               const data = JSON.parse(http.responseText);
               this.setState({'modelData': data['data']});
@@ -92,17 +91,18 @@
           }
 
           return (
-            <div class="container">
+            <div class="container-fluid">
               <br/><br/>
-              <div class="row">
-                <div class="col-2" style={{marginLeft: '20px'}}>
+              <div class="row justify-content-md-center">
+
+                <div class="col-2" style={{marginLeft: '0px', marginRight:'0px'}}>
                   <FilterPane callback={this.handleFiltering.bind(this)} models={this.state.modelData}/>
                 </div>
-                <div class="verticalLine"></div>
+                
                 <div class="col-8">
                   <div class="container">
                     <div class="row">
-                      <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber} numRes={this.state.resultCount}/>
+                        <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} currPage={this.state.pageNumber} numRes={this.state.resultCount}/>
                     </div>
                   </div>
                   <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber} numRes={this.state.resultCount} />
@@ -416,16 +416,12 @@
       class PictureComponent extends React.Component {
         render() {
           return [
-            <div class="col3">
-              <div class="container">
-                <div class="card bg-dark text-white">
-                  <img height="180" src={this.props.src}/> {/* {this.props.src} */}
-                  <div class="card-img-overlay">
-                    <h5 class="card-title">{this.props.title}</h5>
-                    <br/><br/><br/><br/>
-                    <p class="card-text" style={{'text-align':'right'}}>{this.props.year}</p>
-                  </div>
-                </div>
+            <div class="card bg-dark text-white">
+              <img height="180" width="320" src={this.props.src}/> {/* {this.props.src} */}
+              <div class="card-img-overlay">
+                <h5 class="card-title">{this.props.title}</h5>
+                <br/><br/><br/><br/>
+                <p class="card-text" style={{'text-align':'right'}}>{this.props.year}</p>
               </div>
             </div>
           ];
