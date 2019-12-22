@@ -256,17 +256,16 @@
           this.state = { 'set': false };
         }
 
-        refresh = () => {
-          this.props.callback(this.props.title, this.props.filter, this.state.set);
+        refresh = (desiredState) => {
+          this.props.callback(this.props.title, this.props.filter, desiredState);
           this.props.update();
         }
 
         handleCheck(e) {
-          this.state.set = !this.state.set;
-          this.props.callback(this.props.title, this.props.filter, this.state.set);
-          /*this.setState(((state, props) => ({
-            'set': !state.set
-          })), this.refresh());*/
+          const desiredState = !this.state.set;
+          this.setState(((state, props) => ({
+            'set': desiredState
+          })), this.refresh(desiredState));
         }
 
         componentDidMount() {
@@ -331,11 +330,13 @@
       class ModalContainer extends React.Component {
         constructor (props) {
           super(props);
+          this.state = { 'setTitle': undefined }; // appear only once
         }
 
         componentDidUpdate() {
           var btn = document.getElementById('expose-modal');
-          if (btn.length != 0 && this.props.title != 'ok') {
+          if (btn.length != 0 && this.props.title != undefined && this.props.title != this.state.setTitle) {
+            this.setState({ 'setTitle': this.props.title });
             btn.click(); // could not have been created in the real DOM yet, using sketchy fix to prevent the initial display on first component mount
           }
         }
@@ -348,6 +349,7 @@
       }
 
       class Modal extends React.Component {
+
         render() {
           if (this.props.title === undefined) {
             return (<div></div>);
@@ -444,7 +446,7 @@
               diffObj[key + '=' + value] = true;
             }
 
-            this.setState(diffObj);//, this.updateParent);
+            this.setState(diffObj, this.updateParent);
           }
 
           componentDidMount() {
