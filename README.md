@@ -16,3 +16,6 @@ Lastly, the actual backend logic is written in Typescript and is running as a fu
 
 ## Computer Vision
 To-be-determined .... 
+
+## Screenshot
+![](https://i.imgur.com/eGDA3dJ.jpg)
