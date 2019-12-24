@@ -1,4 +1,4 @@
-# Model Car Inventory
+![](https://i.imgur.com/y8gvtaw.png)
 
 This application has two main purposes. First, is an inventory of my model car collection! Second, a simple utility for classifying any model car using modern cloud computer vision techniques. 
 
