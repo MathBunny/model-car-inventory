@@ -13,5 +13,9 @@ The frontend uses client-sided React compiled with Babel. It uses the bootstrap 
 ## Backend
 All the images are stored on Google Cloud Storage. The metadata for each model is stored on a Firestore powered by Firebase.  The backend logic is written in Typescript and is running as a function on Google Cloud. On the client side, the `JSON` from the model objects is processed and dynamically changes the contents of the site. 
 
+## Future Work
+* Improvements for responsive web design (i.e., improved mobile support and tiling)
+* Embedding the computer vision component
+
 ## Gallery Screenshot
 ![](https://i.imgur.com/eGDA3dJ.jpg)
