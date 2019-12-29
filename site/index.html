@@ -145,25 +145,28 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <br>
-        <p> Fundamentally, the system used a crane motor to rotate an axle with a small circular metal disk rotating. On-top, a black reflective disk was placed (not shown in the setup).  
+        <div class="modal-body">
+         <div class="container-fluid">
+
+        <p> Fundamentally, the system used a crane motor to rotate an axle with a small circular metal disk rotating. On-top, a black reflective disk was placed (not shown in the setup). <br><br>
         <img style="display:block; width:100%; height:auto; background-repeat: no-repeat;" src="https://i.imgur.com/GwpDfcX.png">
         <br>
-        To control the speed of the motor, an Arduino was used to provide power to the motor. Unfortunately, an S7 Edge was used to record the video in slow-motion, which yielded grainy footage and poor focus.
+        To control the speed of the motor, an Arduino was used to provide power to the motor. Unfortunately, an S7 Edge was used to record the video, which yielded grainy footage and poor focus.
         <br>
         <br>
         <img style="display:block; width:100%; height:auto; background-repeat: no-repeat;" src="https://i.imgur.com/FTTmzbe.png">
         <br>
-        After the video was recorded, it was preprocessed on iMovie to further reduce motion blur, correct the color values (hue, saturation, etc), and later remove the audio and trimmed it to precisely one rotation in 36 seconds.
+        After the video was recorded, it was preprocessed on iMovie to further reduce motion blur, correct the color values (hue, saturation, etc.), and later remove the audio and trimmed it to precisely one full 360º rotation in 36 seconds.
         <br><br>
         While the HTML5 video element seemed promising, it failed to provide performant seeks. The reasoning behind this is due to browsers by default supporting only three buffering schemes: none, metadata or "auto". <br><br>
-        The fix was to adopt the Plyr open-source video playing library. The advantage of this library is that it allows for more customizability with respect to the available controls and integrating tracks.<br><br>Tracks are the key capability allowing for near-constant time seeks. By leveraging *.vtt extensions used for subtitles, it's possible to provide graphics at given snapshots in time.
+        The fix was to adopt the <a href="https://github.com/sampotts/plyr" target="_blank">Plyr</a> open-source video playing library. The advantage of this library is that it allows for more customizability with respect to the available controls and integrating tracks.<br><br>Tracks are the key capability allowing for near-constant time seeks. By leveraging *.vtt extensions used for subtitles, it's possible to provide graphics at given snapshots in time.
         <br><br>
 
         <img style="display:block; width:100%; height:auto; background-repeat: no-repeat;" src="https://i.imgur.com/bRHxAvN.png">
-        <br> The creation process is as follows. First, the video was converted to mp4 format using Handbrake. Secondly, ffmpeg was used to extract n frames per second (chosen value was 2). Second, imagemagick was used to append all the files into one large sprite, compressed to 50% size. After, the png file was further compressed using a small factor lossy compression. 
+        <br> The creation process is as follows. First, the video was converted to mp4 format using Handbrake. Secondly, ffmpeg was used to extract n frames per second (chosen value was 2). After, imagemagick was used to append all the files into one large sprite, compressed to 50% size. Lastly, the png file was further compressed using a small factor lossy compression. 
 
-        <br><br> After the sprite was created, a simple Python script was written to produce the coordinate values for traversing through the sprite at given x/y/w/h values.
+        <br><br> After the sprite was created, a simple Python script was written to produce the coordinate values for traversing through the sprite at given x/y/w/h values. This yielded a ~6.4MB sprite covering 72 frames which are traversed during seeks at the given coordinates in the vtt file.
+      </div></div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
