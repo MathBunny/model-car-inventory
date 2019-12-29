@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Model Car Inventory</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+  <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+  <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  <script src="./js/data.js"></script>
+
+  <link rel="stylesheet" href="./css/stylesheet.css">
+  <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase.js"></script>
+</head>
+<body class="bg-light">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#" style="margin-left:100px">Model Car Inventory</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">Featured</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Gallery <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="news.html">Recent Additions</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="classify.html">Classify</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="root"></div>
+
+  <script type="text/babel">
+      // Obtain the root 
+      const rootElement = document.getElementById('root');
+      const rootElement2 = document.getElementById('testA');
+
+      class Gallery extends React.Component {
+        constructor(props) {
+          super(props);
+          // Make variable names more consistent
+          this.state = { 'titleSelected': undefined, 'srcSelected': undefined, 'disabled': [], 'pageNumber': 1, 'startPageNum': 1, 'endPageNum': 1, 'numPages': 1, 'modelData': [] };
+        }
+
+        handlePageSet(pageNumber) {
+          this.setState({ 'pageNumber': pageNumber });
+        }
+
+        handleFiltering(filterArr) {
+          this.setState({ 'disabled': filterArr, 'pageNumber': 1 });
+        }
+
+        handleNumPages(pageCount, results) {
+          // Duplicate variables?
+          this.setState({ 'numPages': pageCount, 'endPageNum': Math.max(1, pageCount), 'resultCount': results });
+        }
+
+        handleModalSelection(title, src) {
+          this.setState({ 'titleSelected': title, 'srcSelected': src });
+        }
+
+        getModelData() {
+            const http = new XMLHttpRequest();
+            const url ='https://us-central1-toy-car-visualizer.cloudfunctions.net/retrieveModels';
+            http.open('GET', url);
+            http.send();
+
+            // Properly use async/await
+            http.onreadystatechange = (e) => {
+              const data = JSON.parse(http.responseText);
+              this.setState({'modelData': data['data']});
+            }
+            return [];
+        }
+
+
+        render() {
+
+          if (this.modelData == undefined) {
+            this.modelData = this.getModelData();
+          }
+
+          return (
+            <div class="container-fluid">
+              <br/><br/>
+              <div class="row justify-content-md-center">
+
+                <div class="col-2" style={{marginLeft: '0px', marginRight:'0px'}}>
+                  <FilterPane callback={this.handleFiltering.bind(this)} models={this.state.modelData}/>
+                </div>
+                
+                <div class="col-8">
+                  <ModalContainer title={this.state.titleSelected} src={this.state.srcSelected}/>
+                  <div class="container">
+                    <div class="row">
+                        <PageView numPages={this.state.numPages} callback={this.handleNumPages.bind(this)} data={JSON.stringify(this.state.modelData)} disabled={this.state.disabled} modalCallback={this.handleModalSelection.bind(this)} currPage={this.state.pageNumber} numRes={this.state.resultCount}/>
+                    </div>
+                  </div>
+                  <Pagination startPage={this.state.startPageNum} handlePageSet={this.handlePageSet.bind(this)} endPage={this.state.endPageNum} currPage={this.state.pageNumber} numRes={this.state.resultCount} />
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class PageView extends React.Component {
+        render() {
+          const RES_PER_PAGE = 20;
+
+          let arr = [];
+          this.props.data = JSON.parse(this.props.data);
+          for (let x = 0; x < this.props.data.length; x++) {
+            let valid = true;
+            for (let y = 0; y < this.props.disabled.length; y++) {
+              if (this.props.data[x][Object.keys(this.props.disabled[y])[0]] === this.props.disabled[y][Object.keys(this.props.disabled[y])[0]]) {
+                valid = false;
+                break;
+              }
+            }
+            if (valid) {
+              arr.push(this.props.data[x]);
+            }
+          }
+
+          // Load images for those in the array!
+          arr = arr.map(entry => <PictureComponent modalCallback={this.props.modalCallback} src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
+
+          
+          let numPages = Math.ceil(arr.length / RES_PER_PAGE);
+          if (this.props.numPages != numPages || this.props.numRes != arr.length) {
+              this.props.callback(numPages, arr.length);
+          }
+
+          let offset = (this.props.currPage * RES_PER_PAGE) - RES_PER_PAGE;
+          arr = arr.slice(offset, offset + RES_PER_PAGE);
+
+          let endPageNum = `numPages`;
+
+          if (arr.length == 0) {
+            return <h4> No results </h4>;
+          }
+
+          const resp = [];
+          arr.forEach(entry => resp.push(entry));
+          resp.push(<br/>);
+          return resp;
+        };
+      }
+
+      class PaginationItem extends React.Component {
+         handleClick = () => {
+            this.props.setPage(this.props.pageNumber);
+         }
+
+         render() {
+            if (this.props.type === "prev") {
+              if (this.props.enabled === "true") {
+                  return <li class="page-item"><a class="page-link" onClick={this.handleClick} href="#" tabindex="-1" aria-disabled="false">Previous</a></li>;
+              }
+              return <li class="page-item disabled"><a class="page-link" onClick={this.handleClick} href="#" tabindex="-1" aria-disabled="true">Previous</a></li>;
+            }
+            else if (this.props.type === "next") {
+              if (this.props.enabled == "true") {
+                return <li class="page-item"><a class="page-link" onClick={this.handleClick} href="#">Next</a></li>;
+              }
+              else {
+                return <li class="page-item disabled"><a class="page-link" onClick={this.handleClick} href="#">Next</a></li>;
+              }
+            }
+            else {
+              if (this.props.enabled === "true") {
+                return (<li class="page-item active" aria-current="page"><a onClick={this.handleClick} class="page-link" href="#">{this.props.pageNumber} <span class="sr-only">(current)</span></a></li>);
+              } else {
+                return (<li class="page-item"><a class="page-link" onClick={this.handleClick} href="#">{this.props.pageNumber}</a></li>);
+              }
+            }
+         }
+      }
+
+
+      class Pagination extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = { 'currPage': this.props.currPage + '' };
+            this.handleClick = this.handleClick.bind(this);
+          }
+
+          handleClick(pageNumber) {
+             this.setState({ 'currPage': pageNumber + '' });
+             this.props.handlePageSet(pageNumber);
+          }
+
+          render() {
+            let ticks = [];
+
+            let startPage = parseInt(this.props.startPage);
+            let endPage = parseInt(this.props.endPage);
+            let currPage = parseInt(this.state.currPage);
+
+            if (currPage == startPage) {
+              ticks.push(<PaginationItem type="prev" pageNumber={currPage - 1} setPage={this.handleClick} enabled="false"/>);
+            }
+            else {
+              ticks.push(<PaginationItem type="prev" pageNumber={currPage - 1} setPage={this.handleClick} enabled="true"/>);
+            }
+
+            for (let x = startPage; x <= endPage; x++) {
+              if (x === currPage) {
+                ticks.push(<PaginationItem setPage={this.handleClick} pageNumber={x} enabled="true"/>);
+              } else {
+                ticks.push(<PaginationItem setPage={this.handleClick} pageNumber={x} enabled="false"/>);
+              }
+            }
+
+            if (currPage != endPage) {
+              ticks.push(<PaginationItem type="next" pageNumber={currPage + 1} setPage={this.handleClick} enabled="true"/>);
+            }
+            else {
+              ticks.push(<PaginationItem type="next" pageNumber={currPage + 1} setPage={this.handleClick} enabled="false"/>);
+            }
+
+            return (
+              <div>
+                <br/>
+                <nav aria-label="...">
+                  <ul class="pagination">
+                    {ticks}
+                  </ul>
+                </nav>
+                <p> Result count: {this.props.numRes} </p>
+               {/* <p> Result count: {this.props.numRes} </p> */}
+              </div>
+            );
+          }
+      }
+
+      class FilterRow extends React.Component {
+        constructor (props) {
+          super(props);
+          this.state = { 'set': false };
+        }
+
+        refresh = (desiredState) => {
+          this.props.callback(this.props.title, this.props.filter, desiredState);
+          this.props.update();
+        }
+
+        handleCheck(e) {
+          const desiredState = !this.state.set;
+          this.setState(((state, props) => ({
+            'set': desiredState
+          })), this.refresh(desiredState));
+        }
+
+        componentDidMount() {
+          let arr = Array.from(document.getElementsByClassName('form-check-input'));
+          for(let x = 0; x < arr.length; x++) {
+            if (arr[x].checked == false) {
+              arr[x].click();
+            }
+          }
+        }
+
+        render() {
+          const filter = capitalizeFirstLetter(this.props.filter);
+
+          return (
+            <div class={this.props.title}>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="checked" onChange={this.handleCheck.bind(this)} />
+                <label class="form-check-label active" for="inlineCheckbox1">{filter}</label>
+              </div>
+              <br/>
+            </div>
+          );
+        }
+      }
+
+      class FilterTitle extends React.Component {
+        render() {
+            const title = `${capitalizeFirstLetter(this.props.title)}s`;
+            return (<h6>{title}</h6>);
+        };
+      };
+
+      class Filter extends React.Component {
+
+        toggleAll() {
+          Array.from(document.getElementsByClassName(this.props.title)).forEach(item => {
+            Array.from(item.getElementsByClassName('form-check-input')).forEach((input) => {
+              input.click();
+            });
+          }
+          );
+        }
+
+        render() {
+          const rows = [];
+          this.props.filters.forEach(filter => {
+              rows.push(<FilterRow update={this.props.update} callback={this.props.callback} title={this.props.title} filter={filter}/>);
+          });
+
+          return (
+            <div>
+              <FilterTitle title={this.props.title}/>
+              {rows}
+              <button type="button" id="toggle" class="btn btn-outline-primary" onClick={this.toggleAll.bind(this)}>Toggle</button>
+              <hr/>
+            </div>
+          );
+        };
+      };
+
+      class ModalContainer extends React.Component {
+        constructor (props) {
+          super(props);
+          this.state = { 'setTitle': undefined }; // appear only once
+        }
+
+        componentDidUpdate() {
+          var btn = document.getElementById('expose-modal');
+          if (btn.length != 0 && this.props.title != undefined && this.props.title != this.state.setTitle) {
+            this.setState({ 'setTitle': this.props.title });
+            btn.click(); // could not have been created in the real DOM yet, using sketchy fix to prevent the initial display on first component mount
+          }
+        }
+
+        render() {
+          return (
+            <Modal title={this.props.title} src={this.props.src}/>
+          );
+        }
+      }
+
+      class Modal extends React.Component {
+
+        render() {
+          if (this.props.title === undefined) {
+            return (<div></div>);
+          }
+          return (
+            <div class="modal fade" id="carModal" tabindex="-1" role="dialog" aria-labelledby="carModal" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="carModalTitle">{this.props.title}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <center><img height="360" width="639" src={this.props.src} /> </center>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      class Filters extends React.Component{
+          render() {
+            const models = this.props.models;
+            const attrib = new Map();
+
+            const blacklist = new Set();
+            blacklist.add('model');
+            blacklist.add('src');
+
+            models.forEach(model => {
+                const keys = Object.keys(model);
+                keys.filter(key => !blacklist.has(key)).forEach((key) => {
+                    if (attrib.get(key) === undefined) {
+                        attrib.set(key, new Set());
+                    }
+                    attrib.get(key).add(model[key]);
+                });
+            });
+
+            const filters = [];
+            attrib.forEach((val, key) => {
+              let arr = [];
+              for (let o of attrib.get(key)) {
+                arr.push(o);
+              }
+
+              arr.sort();
+              filters.push(<Filter update={this.props.update} callback={this.props.callback} filters={arr} title={key}/>);
+            });
+
+            return (
+                <div> {filters} </div>
+            );
+          }
+      }
+
+      class FilterPane extends React.Component {
+          constructor (props) {
+            super(props);
+            this.state = {};
+          }
+
+          toggleAll() {
+            Array.from(document.getElementsByClassName('form-check-input')).forEach(item => item.click());
+          }
+
+          updateParent() {
+            const arr = [];
+
+            for (let o of Object.keys(this.state)) {
+              if (this.state[o] == false) {
+                let vals = o.split('=');
+                let resp = {};
+                resp[vals[0]] = vals[1];
+                arr.push(resp);
+              }
+            }
+            this.props.callback(arr);
+          }
+
+          callback(key, value, unset) {
+            let diffObj = {};
+            if (!unset) {
+              diffObj[key + '=' + value] = false;
+            }
+            else {
+              diffObj[key + '=' + value] = true;
+            }
+
+            this.setState(diffObj, this.updateParent);
+          }
+
+          componentDidMount() {
+            this.toggleAll();
+          }
+
+          render() {
+            return (
+              <div>
+                <h4> Filters </h4>
+                <Filters update={this.updateParent.bind(this)} callback={this.callback.bind(this)} models={this.props.models}/>
+                <br/>
+                <button type="button" id="toggle" class="btn btn-outline-primary" onClick={this.toggleAll}>Toggle</button> <button type="button" class="btn btn-primary" onClick={this.updateParent.bind(this)}>Search</button>
+                <br/>
+                <br/>
+              </div>
+            );
+          }
+      }
+
+      // modalCallback is responsible for managing the click event
+      class PictureComponent extends React.Component {
+        render() {
+          return [
+            <div class="card bg-dark text-white" onClick= { () => this.props.modalCallback(this.props.title, this.props.src) } >
+              <img height="180" width="320" src={this.props.src}/> {/* {this.props.src} */}
+              <div class="card-img-overlay">
+                <h5 class="card-title">{this.props.title}</h5>
+                <br/><br/><br/><br/>
+                <p class="card-text" style={{'text-align':'right'}}>{this.props.year}</p>
+              </div>
+            </div>
+          ];
+        }
+      }
+
+      ReactDOM.render(
+        <Gallery/>,
+        root
+      );
+  </script>
+
+  <button style="display:none;" id="expose-modal" type="button" class="btn btn-primary" data-toggle="modal" data-target="#carModal">.</button>
+
+</body>
+
+</html>
