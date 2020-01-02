@@ -388,6 +388,8 @@
             const blacklist = new Set();
             blacklist.add('model');
             blacklist.add('src');
+            blacklist.add('sidesrc');
+            blacklist.add('rearsrc');
 
             models.forEach(model => {
                 const keys = Object.keys(model);
