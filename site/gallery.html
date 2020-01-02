@@ -386,6 +386,8 @@
             const attrib = new Map();
 
             const blacklist = new Set();
+
+            // blacklisted keys from Firestore
             blacklist.add('model');
             blacklist.add('src');
             blacklist.add('sidesrc');
@@ -394,25 +396,31 @@
             models.forEach(model => {
                 const keys = Object.keys(model);
                 keys.filter(key => !blacklist.has(key)).forEach((key) => {
-                    if (attrib.get(key) === undefined) {
-                        attrib.set(key, new Set());
+                    const lcKey = key.toLowerCase();
+                    if (attrib.get(lcKey) === undefined) {
+                        attrib.set(lcKey, { oKey: key, vals: new Set() });
                     }
-                    attrib.get(key).add(model[key]);
+                    attrib.get(lcKey).vals.add(model[key]);
                 });
             });
-
 
             const keys = [...attrib.keys()].sort();
             const filters = [];
 
             keys.forEach((key) => {
               let arr = [];
-              for (let o of attrib.get(key)) {
-                arr.push(o);
+              let visited = new Set();
+
+              for (let o of attrib.get(key).vals) {
+                if (!visited.has(o.toLowerCase())) {
+                  arr.push(o);
+                  visited.add(o.toLowerCase());
+                }
               }
 
-              arr.sort();
-              filters.push(<Filter update={this.props.update} callback={this.props.callback} filters={arr} title={key}/>);
+              const oKey = attrib.get(key).oKey;
+              arr = arr.sort((x, y) => (x.toUpperCase().localeCompare(y.toUpperCase()))); // handle case of capitalization
+              filters.push(<Filter update={this.props.update} callback={this.props.callback} filters={arr} title={oKey}/>);
             });
 
             return (
