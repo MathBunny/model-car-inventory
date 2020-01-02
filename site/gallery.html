@@ -401,8 +401,11 @@
                 });
             });
 
+
+            const keys = [...attrib.keys()].sort();
             const filters = [];
-            attrib.forEach((val, key) => {
+
+            keys.forEach((key) => {
               let arr = [];
               for (let o of attrib.get(key)) {
                 arr.push(o);
