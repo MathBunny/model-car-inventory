@@ -8,6 +8,8 @@ This application has three main purposes. First, it serves as an inventory of my
 ## Frontend
 The frontend uses client-sided React compiled with Babel. It uses the bootstrap framework. Every component is carefully outlined in React to promote reusability with minimal state coupling. 
 
+In addition, the home screen includes a 360º rotatable view of a car, which is powered using HTML5 videos and leverages VTT (Video Text Tracks) to use a sprite caption providing live scrubbing. More details can found on the site itself.
+
 (In the future, hooks will be adopted to further reduce coupling)
 
 ## Backend
@@ -17,5 +19,6 @@ All the images are stored on Google Cloud Storage. The metadata for each model i
 * Improvements for responsive web design (i.e., improved mobile support and tiling)
 * Embedding the computer vision component
 
-## Gallery Screenshot
+## Screenshots
+![](https://i.imgur.com/kbD4ZL1.png)
 ![](https://i.imgur.com/eGDA3dJ.jpg)
