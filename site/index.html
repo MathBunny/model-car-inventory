@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Model Car Inventory</title>
 
+  <link rel="shortcut icon" type="image/png" href="img/M-Flag.png">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -103,7 +104,7 @@
   <container>
     <center> <img src="https://i.imgur.com/y8gvtaw.png"> </center>
     <hr>
-    
+
       <div class="container-fluid">
         <br/>
         <div class="row justify-content-md-center">
@@ -114,12 +115,12 @@
             </div>
             <div class="card-body">
               <h5 class="card-title"><img src="https://i.imgur.com/M7mUF0l.png"/> Volvo V70 (3rd Generation)</h5>
-              
+
                 <video id="video" playsinline controls loop muted autoplay>
                   <source src="https://d255f9fqc5psux.cloudfront.net/Storage/VolvoSlowMotionEdited.mp4" type="video/mp4"/>
                   <track kind="metadata" src="https://d255f9fqc5psux.cloudfront.net/Storage/volvo-slowmo.vtt"></track>
-                </video> 
-             
+                </video>
+
 
               <p class="card-text" style="text-align:center">The 3rd generation Volvo V70 was produced between 2007-2016. It was offered in four and six-cylinder engines. The T5/T6 models produced 251/300hp respectively.</p>
               <center>
@@ -162,7 +163,7 @@
         <br><br>
 
         <img style="display:block; width:100%; height:auto; background-repeat: no-repeat;" src="https://i.imgur.com/bRHxAvN.png">
-        <br> The creation process is as follows. First, the video was converted to mp4 format using Handbrake. Secondly, ffmpeg was used to extract n frames per second (chosen value was 2). After, imagemagick was used to append all the files into one large sprite, compressed to 50% size. Lastly, the png file was further compressed using a small factor lossy compression. 
+        <br> The creation process is as follows. First, the video was converted to mp4 format using Handbrake. Secondly, ffmpeg was used to extract n frames per second (chosen value was 2). After, imagemagick was used to append all the files into one large sprite, compressed to 50% size. Lastly, the png file was further compressed using a small factor lossy compression.
 
         <br><br> After the sprite was created, a simple Python script was written to produce the coordinate values for traversing through the sprite at given x/y/w/h values. This yielded a ~6.4MB sprite covering 72 frames which are traversed during seeks at the given coordinates in the vtt file.
         </div>
@@ -254,7 +255,7 @@
   }
 
   $("video").click(function() {
-    //console.log(this); 
+    //console.log(this);
     if (this.paused) {
       this.play();
     } else {
