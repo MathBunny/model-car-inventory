@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Model Car Inventory</title>
 
+  <link rel="shortcut icon" type="image/png" href="img/M-Flag.png">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -49,7 +50,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-      // Obtain the root 
+      // Obtain the root
       const rootElement = document.getElementById('root');
       const rootElement2 = document.getElementById('testA');
 
@@ -104,7 +105,7 @@
                 <div class="col-2" style={{marginLeft: '0px', marginRight:'0px'}}>
                   <FilterPane callback={this.handleFiltering.bind(this)} models={this.state.modelData}/>
                 </div>
-                
+
                 <div class="col-8">
                   <ModalContainer title={this.state.titleSelected} src={this.state.srcSelected}/>
                   <div class="container">
@@ -142,7 +143,7 @@
           // Load images for those in the array!
           arr = arr.map(entry => <PictureComponent modalCallback={this.props.modalCallback} src={entry['src']} title={entry['brand'] + ' ' + entry['model']} year={entry['year']}/>);
 
-          
+
           let numPages = Math.ceil(arr.length / RES_PER_PAGE);
           if (this.props.numPages != numPages || this.props.numRes != arr.length) {
               this.props.callback(numPages, arr.length);
